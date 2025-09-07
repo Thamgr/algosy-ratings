@@ -4,7 +4,7 @@
 git pull
 
 # Install updated requirements
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # Stop the service
 sudo systemctl stop algosy-ratings.service

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Python requirements
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # Copy service file to systemd directory
 sudo cp algosy-ratings.service /etc/systemd/system/
