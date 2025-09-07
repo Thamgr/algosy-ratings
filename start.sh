@@ -15,8 +15,9 @@ pip3 install -r requirements.txt
 # Deactivate virtual environment
 deactivate
 
-# Update service file to use the virtual environment
+# Update service file to use the virtual environment and current directory
 sed -i "s|ExecStart=.*|ExecStart=$(pwd)/venv/bin/python -m uvicorn src.app:app --host 0.0.0.0 --port 8000|" algosy-ratings.service
+sed -i "s|WorkingDirectory=.*|WorkingDirectory=$(pwd)|" algosy-ratings.service
 
 # Copy service file to systemd directory
 sudo cp algosy-ratings.service /etc/systemd/system/

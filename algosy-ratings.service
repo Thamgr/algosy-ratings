@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/Users/thamgr/Documents/GitHub/algosy-ratings
+WorkingDirectory=$(pwd)
 ExecStart=/usr/bin/python3 -m uvicorn src.app:app --host 0.0.0.0 --port 8000
 Restart=on-failure
 RestartSec=5s
