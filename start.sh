@@ -1,7 +1,22 @@
 #!/bin/bash
 
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+fi
+
+# Activate virtual environment
+source venv/bin/activate
+
 # Install Python requirements
-pip3 install -r requirements.txt
+pip install -r requirements.txt
+
+# Deactivate virtual environment
+deactivate
+
+# Update service file to use the virtual environment
+sed -i "s|ExecStart=.*|ExecStart=$(pwd)/venv/bin/python -m uvicorn src.app:app --host 0.0.0.0 --port 8000|" algosy-ratings.service
 
 # Copy service file to systemd directory
 sudo cp algosy-ratings.service /etc/systemd/system/
