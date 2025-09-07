@@ -1,12 +1,16 @@
-import csv
 import uvicorn
+import os
 from fastapi import FastAPI, Query
 from typing import Dict, List, Optional, Union, Any
 import asyncio
-from lib.tools import get_ratings
+from lib.tools import get_ratings, read_participants_csv
+from lib.download_spreadsheet import download_google_sheet_csv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 import logging
+
+# Get the project root directory
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Configure logging
 logging.basicConfig(
@@ -29,47 +33,51 @@ async def update_participants_data():
     
     try:
         # Read participants from CSV
-        handles_to_names = {}
-        handles = []
+        handles_to_names, handles = read_participants_csv()
         
-        with open("raw/participants_list.csv", "r", encoding="utf-8") as csvfile:
-            reader = csv.reader(csvfile)
-            next(reader)  # Skip header row
-            for row in reader:
-                if len(row) >= 3:
-                    timestamp, name, handle = row
-                    handles_to_names[handle] = name.strip()
-                    handles.append(handle)
+        if not handles:
+            logger.warning("No handles found in CSV file")
+            return
         
         # Get ratings for all handles
         ratings = get_ratings(handles)
-        
-        # Create the final data structure {handle: [name, rating]}
-        new_data = {}
+
         for handle, rating in ratings.items():
             name = handles_to_names.get(handle, "Unknown")
             # Replace None ratings with 0
             rating_value = 0 if rating is None else rating
-            new_data[handle] = [name, rating_value]
-        
-        participants_data = new_data
+            participants_data[handle] = [name, rating_value]
+
         logger.info(f"Updated data for {len(participants_data)} participants at {datetime.now()}")
     except Exception as e:
         logger.error(f"Error updating participants data: {str(e)}")
+
+async def download_and_update():
+    """
+    Download the latest CSV file and update participant data.
+    This function will be called by the scheduler.
+    """
+    logger.info("Downloading latest CSV file...")
+    success = download_google_sheet_csv()
+    if success:
+        logger.info("CSV file downloaded successfully, updating participant data...")
+        await update_participants_data()
+    else:
+        logger.error("Failed to download CSV file, skipping data update")
 
 @app.on_event("startup")
 async def startup_event():
     """
     Initialize data and start the scheduler on application startup.
     """
-    # Initial data load
-    await update_participants_data()
+    # Initial download and data load
+    await download_and_update()
     
-    # Set up scheduler to update data every 6 hours
+    # Set up scheduler to download CSV and update data every 6 hours
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(update_participants_data, 'interval', hours=6)
+    scheduler.add_job(download_and_update, 'interval', hours=6)
     scheduler.start()
-    logger.info("Scheduler started - will update ratings every 6 hours")
+    logger.info("Scheduler started - will download CSV and update ratings every 6 hours")
 
 @app.get("/ratings")
 async def get_participant_ratings(
