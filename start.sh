@@ -3,14 +3,14 @@
 # Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
-    python3 -m venv venv
+    sudo python3 -m venv venv
 fi
 
 # Activate virtual environment
 source venv/bin/activate
 
 # Install Python requirements
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # Deactivate virtual environment
 deactivate
