@@ -69,6 +69,7 @@ async def startup_event():
     """
 
     fetch_data()
+    update_participants_data()
     
     # Set up scheduler to download CSV and update data every 6 hours
     scheduler = AsyncIOScheduler()
