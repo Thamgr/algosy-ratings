@@ -10,7 +10,7 @@ class UsersFetcher():
 
     def prepare(self):
         load_dotenv()
-        self.USERS_SPREADHEET_URL = os.environ.get('USERS_SPREADHEET_URL', '')
+        self.USERS_SPREADSHEET_URL = os.environ.get('USERS_SPREADSHEET_URL', '')
         self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         return True
 
