@@ -28,7 +28,7 @@ class UsersFetcher():
         
         try:
             # Download the CSV content
-            response = requests.get(self.USERS_SPREADHEET_URL)
+            response = requests.get(self.USERS_SPREADSHEET_URL)
             
             # Check if the request was successful
             if response.status_code == 200:
