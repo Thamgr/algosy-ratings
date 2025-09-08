@@ -26,7 +26,7 @@ app = FastAPI(title="Codeforces Ratings API")
 # Global variable to store participants data
 participants_data = {}
 
-async def update_participants_data():
+def update_participants_data():
     """
     Load participants data from CSV and fetch their ratings.
     This function can be called on startup and by the scheduler.
@@ -55,7 +55,7 @@ async def update_participants_data():
         logger.error(f"Error updating participants data: {str(e)}")
 
 
-async def fetch_data():
+def fetch_data():
     fetchers = [InformaticsFetcher(), UsersFetcher()]
     for fetcher in fetchers:
         fetcher.prepare()
@@ -67,11 +67,13 @@ async def startup_event():
     """
     Initialize data and start the scheduler on application startup.
     """
+
+    fetch_data()
     
     # Set up scheduler to download CSV and update data every 6 hours
     scheduler = AsyncIOScheduler()
     scheduler.add_job(fetch_data, 'interval', hours=6)
-    scheduler.add_job(update_participants_data, 'interval', hours=6)
+    scheduler.add_job(update_participants_data, 'interval', hours=1)
     scheduler.start()
     logger.info("Scheduler started - will download CSV and update ratings every 6 hours")
 
