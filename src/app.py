@@ -5,6 +5,8 @@ from typing import Dict, List, Optional, Union, Any
 import asyncio
 from lib.tools import get_ratings, read_participants_csv
 from lib.download_spreadsheet import download_google_sheet_csv
+from lib.fetchers.InformaticsFetcher import InformaticsFetcher
+from lib.fetchers.UsersFetcher import UsersFetcher
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 import logging
@@ -52,30 +54,24 @@ async def update_participants_data():
     except Exception as e:
         logger.error(f"Error updating participants data: {str(e)}")
 
-async def download_and_update():
-    """
-    Download the latest CSV file and update participant data.
-    This function will be called by the scheduler.
-    """
-    logger.info("Downloading latest CSV file...")
-    success = download_google_sheet_csv()
-    if success:
-        logger.info("CSV file downloaded successfully, updating participant data...")
-        await update_participants_data()
-    else:
-        logger.error("Failed to download CSV file, skipping data update")
+
+async def fetch_data():
+    fetchers = [InformaticsFetcher(), UsersFetcher()]
+    for fetcher in fetchers:
+        fetcher.prepare()
+        fetcher.process()
+
 
 @app.on_event("startup")
 async def startup_event():
     """
     Initialize data and start the scheduler on application startup.
     """
-    # Initial download and data load
-    await download_and_update()
     
     # Set up scheduler to download CSV and update data every 6 hours
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(download_and_update, 'interval', hours=6)
+    scheduler.add_job(fetch_data, 'interval', hours=6)
+    scheduler.add_job(update_participants_data, 'interval', hours=6)
     scheduler.start()
     logger.info("Scheduler started - will download CSV and update ratings every 6 hours")
 

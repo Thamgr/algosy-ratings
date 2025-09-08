@@ -1,0 +1,355 @@
+
+
+<p>
+</p>
+
+<table align="center" class="BlueTable" cellspacing="0" cellpadding="2">
+    
+    <tr>
+            <td>N</td>
+                        <td>Name</td>
+                        <td>Sum</td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=1411">A</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=1446">B</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=756">C</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=232">D</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=766">E</a>
+            </td>
+                </tr>
+
+
+    
+        <tr>
+            <td>1</td>
+            <td>
+                <a href="/submits/view.php?user_id=355608">Василий Виноградов</a>
+            </td>
+            <td>4</td>
+            
+        
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +7
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +1
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +9
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>2</td>
+            <td>
+                <a href="/submits/view.php?user_id=646739">Мария Васильева</a>
+            </td>
+            <td>3</td>
+            
+        
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>3</td>
+            <td>
+                <a href="/submits/view.php?user_id=649492">Полина Грушанская</a>
+            </td>
+            <td>2</td>
+            
+        
+        <td bgcolor=#e1f2e1>
+            +2
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +5
+        </td>
+                
+        <td bgcolor=#fff>
+            -1
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>4</td>
+            <td>
+                <a href="/submits/view.php?user_id=734197">Дмитрий Тишин</a>
+            </td>
+            <td>2</td>
+            
+        
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +2
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>5</td>
+            <td>
+                <a href="/submits/view.php?user_id=808998">Сергей Пеледов</a>
+            </td>
+            <td>2</td>
+            
+        
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +1
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#fff>
+            -1
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>6</td>
+            <td>
+                <a href="/submits/view.php?user_id=801993">Платон Максимов</a>
+            </td>
+            <td>2</td>
+            
+        
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +1
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>7</td>
+            <td>
+                <a href="/submits/view.php?user_id=807153">Всеволод Виноградов</a>
+            </td>
+            <td>1</td>
+            
+        
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#fff>
+            -1
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+    
+        <tr>
+            <td>8</td>
+            <td>
+                <a href="/submits/view.php?user_id=650733">Лена Конькова</a>
+            </td>
+            <td>1</td>
+            
+        
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+                
+        <td bgcolor=#e1f2e1>
+            +
+        </td>
+                
+        <td bgcolor=#fff>
+            
+        </td>
+        
+        </tr>
+
+    
+    <tr>
+            <td>N</td>
+                        <td>Name</td>
+                        <td>Sum</td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=1411">A</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=1446">B</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=756">C</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=232">D</a>
+            </td>
+                    
+            <td>
+                <a href="/mod/statements/view3.php?chapterid=766">E</a>
+            </td>
+                </tr>
+
+</table>
+<br>
+<table align='center' cellspacing="0" cellpadding="2" border="1">
+        
+    <tr>
+            <td>Letter</td>
+                        <td>Name</td>
+                </tr>
+
+        
+    <tr>
+            <td>Контест</td>
+                        <td>56918 Асимптотика и сортировки</td>
+                </tr>
+
+        
+    <tr>
+            <td>A</td>
+                        <td>Сортировка пузырьком [1411]</td>
+                </tr>
+
+        
+    <tr>
+            <td>B</td>
+                        <td>Результаты олимпиады [1446]</td>
+                </tr>
+
+        
+    <tr>
+            <td>C</td>
+                        <td>Минимум на отрезке [756]</td>
+                </tr>
+
+        
+    <tr>
+            <td>D</td>
+                        <td>Сортировка вставками [232]</td>
+                </tr>
+
+        
+    <tr>
+            <td>E</td>
+                        <td>Сортировка слиянием [766]</td>
+                </tr>
+
+</table>
+
+
+
+
+
+
+

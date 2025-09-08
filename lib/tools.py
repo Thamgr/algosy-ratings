@@ -2,7 +2,7 @@ import os
 import csv
 import logging
 from lib.codeforces_api import CodeforcesAPI
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Any
 
 # Get the project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -62,3 +62,32 @@ def get_ratings(handles: List[str]) -> Dict[str, Optional[int]]:
         ratings[handle] = rating
     
     return ratings
+
+def get_participants() -> List[Dict[str, Any]]:
+    """
+    Read participants from CSV and fetch their Codeforces ratings.
+    
+    Returns:
+        A list of dictionaries, each containing:
+        - handle: Codeforces handle
+        - name: Participant's name
+        - rating: Codeforces rating (or None if not available)
+    """
+    # Read participants data from CSV
+    handles_to_names, handles = read_participants_csv()
+    
+    # Get ratings for all handles
+    ratings = get_ratings(handles)
+    
+    # Combine the data into the required format
+    participants = []
+    for handle in handles:
+        participant = {
+            "handle": handle,
+            "name": handles_to_names.get(handle, ""),
+            "rating": ratings.get(handle)
+        }
+        participants.append(participant)
+    
+    logger.info(f"Processed {len(participants)} participants with their ratings")
+    return participants
