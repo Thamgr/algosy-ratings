@@ -11,6 +11,7 @@ class InformaticsParser():
         self.PROJECT_ROOT = None
         self.INFORMATICS_DIR = None
         self.CONTEST_IDS = []
+        self.BANNED_NAMES = []
 
     def prepare(self):
         """
@@ -27,6 +28,9 @@ class InformaticsParser():
             # Get contest IDs from environment variable
             contest_ids_str = os.environ.get('INFORMATICS_CONTEST_IDS', '')
             self.CONTEST_IDS = [id.strip() for id in contest_ids_str.split(',') if id.strip()]
+
+            banned_names_str = os.environ.get('BANNES_NAMES_STR', '')
+            self.BANNED_NAMES = [name.strip() for name in banned_names_str.split(',') if name.strip()]
             
             self.logger.info(f"Using Informatics directory: {self.INFORMATICS_DIR}")
             self.logger.info(f"Contest IDs to process: {self.CONTEST_IDS}")
@@ -97,6 +101,9 @@ class InformaticsParser():
                     continue
                 
                 name = name_link.text.strip()
+
+                if name in self.BANNED_NAMES:
+                    continue
                 
                 # Count pluses (solved problems)
                 pluses = 0
