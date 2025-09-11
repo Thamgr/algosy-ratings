@@ -22,16 +22,15 @@ class InformaticsParser():
         """
         try:
             load_dotenv()
-            self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-            self.INFORMATICS_DIR = os.environ.get('INFORMATICS_DIR', os.path.join('raw', 'informatics'))
+            self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
+            self.INFORMATICS_DIR = os.environ.get('INFORMATICS_DIR')
             
             # Get contest IDs from environment variable
-            contest_ids_str = os.environ.get('INFORMATICS_CONTEST_IDS', '')
+            contest_ids_str = os.environ.get('INFORMATICS_CONTEST_IDS')
             self.CONTEST_IDS = [id.strip() for id in contest_ids_str.split(',') if id.strip()]
 
-            banned_names_str = os.environ.get('BANNES_NAMES_STR', '')
+            banned_names_str = os.environ.get('BANNED_NAMES')
             self.BANNED_NAMES = [name.strip() for name in banned_names_str.split(',') if name.strip()]
-            self.logger.info(f"Got banned_names for informatics: {str(self.BANNED_NAMES)}")
             
             self.logger.info(f"Using Informatics directory: {self.INFORMATICS_DIR}")
             self.logger.info(f"Contest IDs to process: {self.CONTEST_IDS}")
