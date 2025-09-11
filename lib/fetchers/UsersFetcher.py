@@ -10,8 +10,9 @@ class UsersFetcher():
 
     def prepare(self):
         load_dotenv()
-        self.USERS_SPREADSHEET_URL = os.environ.get('USERS_SPREADSHEET_URL', '')
-        self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.USERS_SPREADSHEET_URL = os.environ.get('USERS_SPREADSHEET_URL')
+        self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
+        self.USERS_CSV_PATH = os.environ.get('USERS_CSV_PATH')
         return True
 
 
@@ -20,7 +21,7 @@ class UsersFetcher():
         Downloads data from a Google Spreadsheet and saves it as a CSV file.
         
         The function downloads data from the specified Google Spreadsheet and
-        saves it to raw/participants_list.csv.
+        saves it to the path specified in USERS_CSV_PATH environment variable.
         
         Returns:
             bool: True if download was successful, False otherwise
@@ -33,11 +34,11 @@ class UsersFetcher():
             # Check if the request was successful
             if response.status_code == 200:
                 # Create the 'raw' directory if it doesn't exist
-                raw_dir = os.path.join(self.PROJECT_ROOT, "raw")
-                os.makedirs(raw_dir, exist_ok=True)
+                csv_dir = os.path.dirname(os.path.join(self.PROJECT_ROOT, self.USERS_CSV_PATH))
+                os.makedirs(csv_dir, exist_ok=True)
                 
                 # Save the content to the specified file
-                output_path = os.path.join(self.PROJECT_ROOT, "raw", "participants_list.csv")
+                output_path = os.path.join(self.PROJECT_ROOT, self.USERS_CSV_PATH)
                 with open(output_path, "wb") as f:
                     f.write(response.content)
                 

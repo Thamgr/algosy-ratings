@@ -19,8 +19,11 @@ class InformaticsFetcher(object):
         """
         load_dotenv()
         try:
-            username = os.environ.get('INFORMATICS_USERNAME', '')
-            password = os.environ.get('INFORMATICS_PASSWORD', '')
+            username = os.environ.get('INFORMATICS_USERNAME')
+            password = os.environ.get('INFORMATICS_PASSWORD')
+            self.INFORMATICS_DIR = os.environ.get('INFORMATICS_DIR')
+            self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
+            
             self.session = cloudscraper.create_scraper(
                 browser={
                     'browser': 'chrome',
@@ -81,12 +84,12 @@ class InformaticsFetcher(object):
         """Load and save contests data
         """
         # Получаем список ID контестов из переменной окружения
-        contest_ids_str = os.environ.get('INFORMATICS_CONTEST_IDS', '')
+        contest_ids_str = os.environ.get('INFORMATICS_CONTEST_IDS')
 
         contest_ids = [id.strip() for id in contest_ids_str.split(',')]
         
-        # Создаем директорию raw/informatics, если она не существует
-        save_dir = pathlib.Path('raw/informatics')
+        # Создаем директорию для сохранения результатов, если она не существует
+        save_dir = pathlib.Path(os.path.join(self.PROJECT_ROOT, self.INFORMATICS_DIR))
         save_dir.mkdir(parents=True, exist_ok=True)
         
         results = {}
@@ -113,7 +116,3 @@ class InformaticsFetcher(object):
                 self.logger.info(f"Ошибка при обработке контеста {contest_id}: {str(e)}")
         
         return results
-
-
-
-
