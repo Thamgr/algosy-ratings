@@ -126,7 +126,7 @@ class Renderer:
                 normalized_solved = solved / self.MAX_SOLVED if self.MAX_SOLVED > 0 else 0
                 score = 500 * (normalized_rating + normalized_solved)
                 
-                result[handle] = [name, score, normalized_rating * 500, normalized_solved * 500]
+                result[handle] = [name, round(score)]
             
             self.logger.info(f"Processed scores for {len(result)} participants")
             return result
