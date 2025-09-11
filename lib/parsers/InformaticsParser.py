@@ -31,6 +31,7 @@ class InformaticsParser():
 
             banned_names_str = os.environ.get('BANNES_NAMES_STR', '')
             self.BANNED_NAMES = [name.strip() for name in banned_names_str.split(',') if name.strip()]
+            self.logger.info(f"Got banned_names for informatics: {str(self.BANNED_NAMES)}")
             
             self.logger.info(f"Using Informatics directory: {self.INFORMATICS_DIR}")
             self.logger.info(f"Contest IDs to process: {self.CONTEST_IDS}")
