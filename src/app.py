@@ -71,8 +71,8 @@ async def get_participant_ratings(
     """
     if type == "list":
         renderer = Renderer()
-        renderer.Prepare()
-        data = renderer.Process()
+        renderer.prepare()
+        data = renderer.process()
             
         return data
     
