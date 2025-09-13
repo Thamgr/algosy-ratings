@@ -130,7 +130,7 @@ class Renderer:
                 if self.mode == 'short':
                     result[handle] = [name, round(score)]
                 elif self.mode == 'full':
-                    result[handle] = {'name': name, 'cf_score': round(normalized_rating, 1), 'informatics_score': round(normalized_solved, 1), 'score': round(score)}
+                    result[handle] = {'name': name, 'cf_score': round(500 * normalized_rating, 1), 'informatics_score': round(500 * normalized_solved, 1), 'score': round(score)}
             
             self.logger.info(f"Processed scores for {len(result)} participants")
             return result
