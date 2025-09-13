@@ -66,7 +66,8 @@ async def startup_event():
 
 @app.get("/ratings")
 async def get_participant_ratings(
-    type: str = Query(None, description="Type of response format")
+    type: str = Query(None, description="Struct of response format"),
+    mode: str = Query('short', description="Mode of response format")
 ):
     """
     Get ratings for all participants.
@@ -78,7 +79,7 @@ async def get_participant_ratings(
         JSON with participant data sorted by rating (descending)
     """
     if type == "list":
-        renderer = Renderer()
+        renderer = Renderer(mode)
         renderer.prepare()
         data = renderer.process()
             

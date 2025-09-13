@@ -7,11 +7,12 @@ class Renderer:
     Class for rendering data from GlobalData into the required format.
     """
     
-    def __init__(self):
+    def __init__(self, mode='short'):
         self.logger = logging.getLogger(__name__)
         self.participants_data = {}
         self.MAX_RATING = 2000  # Maximum rating to normalize by
         self.MAX_SOLVED = 0     # Will be calculated from global_data
+        self.mode = mode
     
     def prepare(self):
         """
@@ -126,7 +127,10 @@ class Renderer:
                 normalized_solved = solved / self.MAX_SOLVED if self.MAX_SOLVED > 0 else 0
                 score = 500 * (normalized_rating + normalized_solved)
                 
-                result[handle] = [name, round(score)]
+                if self.mode == 'short':
+                    result[handle] = [name, round(score)]
+                elif self.mode == 'full':
+                    result[handle] = {'name': name, 'cf_score': round(normalized_rating, 1), 'informatics_score': round(normalized_solved, 1), 'score': round(score)}
             
             self.logger.info(f"Processed scores for {len(result)} participants")
             return result
