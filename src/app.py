@@ -14,9 +14,17 @@ from lib.global_data import GlobalData
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Get the project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Get interval settings from environment variables with defaults
+FETCH_INTERVAL_HOURS = int(os.getenv("FETCH_INTERVAL_HOURS"))
+PARSE_INTERVAL_HOURS = int(os.getenv("PARSE_INTERVAL_HOURS"))
 
 # Configure logging
 logging.basicConfig(
@@ -49,12 +57,12 @@ async def startup_event():
     fetch_data()
     parse_data()
     
-    # Set up scheduler to download CSV and update data every 6 hours
+    # Set up scheduler to download CSV and update data based on environment settings
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(fetch_data, 'interval', hours=6)
-    scheduler.add_job(parse_data, 'interval', hours=1)
+    scheduler.add_job(fetch_data, 'interval', hours=FETCH_INTERVAL_HOURS)
+    scheduler.add_job(parse_data, 'interval', hours=PARSE_INTERVAL_HOURS)
     scheduler.start()
-    logger.info("Scheduler started - will download CSV and update ratings every 6 hours")
+    logger.info(f"Scheduler started - will fetch data every {FETCH_INTERVAL_HOURS} hours and parse data every {PARSE_INTERVAL_HOURS} hours")
 
 @app.get("/ratings")
 async def get_participant_ratings(
