@@ -17,6 +17,7 @@ class GlobalData:
             cls._instance.users_data = {}
             cls._instance.informatics_data = {}
             cls._instance.informatics_common_data = []
+            cls._instance.informatics_session = None
             cls._instance.logger = logging.getLogger(__name__)
         return cls._instance
     
@@ -88,3 +89,22 @@ class GlobalData:
             list: List containing the number of problems in each contest
         """
         return self.informatics_common_data
+        
+    def set_informatics_session(self, session):
+        """
+        Set the informatics session.
+        
+        Args:
+            session: The cloudscraper session object
+        """
+        self.informatics_session = session
+        self.logger.info("Updated informatics session")
+        
+    def get_informatics_session(self):
+        """
+        Get the informatics session.
+        
+        Returns:
+            The cloudscraper session object or None if not set
+        """
+        return self.informatics_session

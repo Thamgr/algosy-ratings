@@ -1,9 +1,9 @@
-import cloudscraper
-from bs4 import BeautifulSoup
 import os
 import pathlib
 import logging
 from dotenv import load_dotenv
+from lib.global_data import GlobalData
+from lib.fetchers.InformaticsSessionReanimator import InformaticsSessionReanimator
 
 
 class InformaticsFetcher(object):
@@ -15,69 +15,30 @@ class InformaticsFetcher(object):
 
 
     def prepare(self) -> bool:
-        """Authorises user
+        """Get session from GlobalData or create a new one using InformaticsSessionReanimator
         """
         load_dotenv()
         try:
-            username = os.environ.get('INFORMATICS_USERNAME')
-            password = os.environ.get('INFORMATICS_PASSWORD')
+            # Read environment variables
             self.INFORMATICS_DIR = os.environ.get('INFORMATICS_DIR')
             self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
             
-            self.session = cloudscraper.create_scraper(
-                browser={
-                    'browser': 'chrome',
-                    'platform': 'windows',
-                    'desktop': True
-                }
-            )
-            # Получаем страницу логина с помощью cloudscraper
-            self.logger.info("Получение страницы логина...")
-            form = self.session.get(self.login_url)
-            
-            # Проверяем статус ответа
-            if form.status_code != 200:
-                self.logger.info(f"Ошибка при получении страницы логина. Статус: {form.status_code}")
-                return False
+            # If no session exists, use InformaticsSessionReanimator to create one
+            if GlobalData().get_informatics_session() is None:
+                self.logger.info("No existing session found, creating a new one...")
+                reanimator = InformaticsSessionReanimator()
+                if not reanimator.prepare():
+                    self.logger.error("Failed to prepare InformaticsSessionReanimator")
+                    return False
+                    
+                if not reanimator.process():
+                    self.logger.error("Failed to create a new session")
+                    return False
                 
-            # Парсим HTML для извлечения токена
-            soup = BeautifulSoup(form.text, 'html.parser')
-            
-            # Ищем форму логина
-            login_form = soup.find('form', {'id': 'login'})
-            
-            # Получаем action URL из формы, если он есть
-            form_action = login_form.get('action')
-            login_url = form_action if form_action else self.login_url
-            
-            # Если action URL относительный, преобразуем его в абсолютный
-            if form_action and not form_action.startswith('http'):
-                if form_action.startswith('/'):
-                    login_url = self.url.rstrip('/') + form_action
-                else:
-                    login_url = self.url + form_action
-            
-            # Ищем все скрытые поля в форме логина
-            hidden_inputs = login_form.find_all('input', {'type': 'hidden'})
-            login_data = {
-                'anchor': '',
-                'username': username,
-                'password': password,
-                'rememberusername': 1
-            }
-            
-            # Добавляем все скрытые поля в данные для отправки
-            for input_field in hidden_inputs:
-                if 'name' in input_field.attrs and 'value' in input_field.attrs:
-                    login_data[input_field.attrs['name']] = input_field.attrs['value']
-
-            # Отправляем запрос на авторизацию
-            res = self.session.post(login_url, data=login_data)
-
-            return 'Вы зашли под именем' in res.text
+            return True
             
         except Exception as e:
-            print(f"Ошибка при авторизации: {str(e)}")
+            self.logger.error(f"Error in prepare: {str(e)}")
             return False
 
     def process(self):
@@ -98,7 +59,7 @@ class InformaticsFetcher(object):
             self.logger.info(f"Загрузка результатов для контеста {contest_id}...")
             try:
                 # Получаем страницу с результатами
-                response = self.session.get(self.standings_url.format(contest_id))
+                response = GlobalData().get_informatics_session().get(self.standings_url.format(contest_id))
                 
                 if response.status_code != 200:
                     self.logger.info(f"Ошибка при получении результатов для контеста {contest_id}. Статус: {response.status_code}")

@@ -3,9 +3,8 @@ import os
 from fastapi import FastAPI, Query
 from typing import Dict, List, Optional, Union, Any
 import asyncio
-from lib.tools import get_ratings, read_participants_csv
-from lib.download_spreadsheet import download_google_sheet_csv
 from lib.fetchers.InformaticsFetcher import InformaticsFetcher
+from lib.fetchers.InformaticsSessionReanimator import InformaticsSessionReanimator
 from lib.fetchers.UsersFetcher import UsersFetcher
 from lib.parsers.InformaticsParser import InformaticsParser
 from lib.parsers.UsersParser import UsersParser
@@ -23,8 +22,9 @@ load_dotenv()
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Get interval settings from environment variables with defaults
-FETCH_INTERVAL_HOURS = int(os.getenv("FETCH_INTERVAL_HOURS"))
-PARSE_INTERVAL_HOURS = int(os.getenv("PARSE_INTERVAL_HOURS"))
+REANIMATE_INTERVAL_MINUTES = int(os.getenv("REANIMATE_INTERVAL_MINUTES"))
+FETCH_INTERVAL_MINUTES = int(os.getenv("FETCH_INTERVAL_MINUTES"))
+PARSE_INTERVAL_MINUTES = int(os.getenv("PARSE_INTERVAL_MINUTES"))
 
 # Configure logging
 logging.basicConfig(
@@ -33,8 +33,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Codeforces Ratings API")
+app = FastAPI(title="Algosy Ratings API")
 
+
+def reanimate():
+    reanimators = [InformaticsSessionReanimator()]
+    for reanimator in reanimators:
+        reanimator.prepare()
+        reanimator.process()
 
 def fetch_data():
     fetchers = [InformaticsFetcher(), UsersFetcher()]
@@ -54,15 +60,17 @@ async def startup_event():
     """
     Initialize data and start the scheduler on application startup.
     """
+    reanimate()
     fetch_data()
     parse_data()
     
     # Set up scheduler to download CSV and update data based on environment settings
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(fetch_data, 'interval', hours=FETCH_INTERVAL_HOURS)
-    scheduler.add_job(parse_data, 'interval', hours=PARSE_INTERVAL_HOURS)
+    scheduler.add_job(reanimate, 'interval', minutes=REANIMATE_INTERVAL_MINUTES)
+    scheduler.add_job(fetch_data, 'interval', minutes=FETCH_INTERVAL_MINUTES)
+    scheduler.add_job(parse_data, 'interval', minutes=PARSE_INTERVAL_MINUTES)
     scheduler.start()
-    logger.info(f"Scheduler started - will fetch data every {FETCH_INTERVAL_HOURS} hours and parse data every {PARSE_INTERVAL_HOURS} hours")
+    logger.info(f"Scheduler started - will fetch data every {FETCH_INTERVAL_MINUTES} minutes and parse data every {PARSE_INTERVAL_MINUTES} minutes")
 
 @app.get("/ratings")
 async def get_participant_ratings(
