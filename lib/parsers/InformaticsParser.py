@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from lib.global_data import GlobalData
 from typing import Dict, Tuple
+from lib.data import InfromaticsNameConvert
 
 class InformaticsParser():
     def __init__(self):
@@ -162,13 +163,14 @@ class InformaticsParser():
         # For each participant, create a list of their results for each contest
         for participant in all_participants:
             participant_results = []
+            participant_converted = InfromaticsNameConvert(participant)
             
             for contest_id in self.CONTEST_IDS:
                 # Get the participant's result for this contest, or 0 if they didn't participate
                 result = contest_results[contest_id].get(participant, 0)
                 participant_results.append(result)
             
-            final_results[participant] = participant_results
+            final_results[participant_converted] = participant_results
         
         self.logger.info(f"Processed {len(self.CONTEST_IDS)} contests with {len(final_results)} total participants")
         
