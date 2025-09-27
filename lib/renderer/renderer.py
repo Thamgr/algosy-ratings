@@ -73,45 +73,13 @@ class Renderer:
                     "solved": solved
                 }
             
-            # Then, add any participants from informatics_data that weren't in users_data
-            for name, solved_list in informatics_data.items():
-                if name not in names_to_handles:
-                    # Create a handle from the name (simplified)
-                    handle = name.lower().replace(" ", "_")
-                    solved = sum(solved_list)
-                    
-                    self.participants_data[handle] = {
-                        "handle": handle,
-                        "name": name,
-                        "rating": 0,  # No rating available
-                        "solved": solved
-                    }
-            
             self.logger.info(f"Prepared data for {len(self.participants_data)} participants")
             return True
         except Exception as e:
             self.logger.error(f"Error preparing renderer data: {str(e)}")
             return False
-    
-    def process(self):
-        """
-        Process the prepared data and return an object with the structure:
-        {
-            handle: [name, score]
-        }
         
-        Score is calculated as:
-        500 * (rating / MAX_RATING + solved / MAX_SOLVED)
-        
-        Where:
-        - MAX_RATING = 2000
-        - MAX_SOLVED = total number of problems across all contests
-        
-        Returns:
-            dict: Dictionary mapping handles to lists with name and calculated score
-        """
-        result = {}
-        
+    def process_web(self):
         try:
             if not self.participants_data:
                 self.logger.warning("No participants data available. Call prepare() first.")
@@ -137,4 +105,33 @@ class Renderer:
         except Exception as e:
             self.logger.error(f"Error processing renderer data: {str(e)}")
             return {}
+        
+    def process_dump(self):
+        return self.participants_data
+    
+    def process(self):
+        """
+        Process the prepared data and return an object with the structure:
+        {
+            handle: [name, score]
+        }
+        
+        Score is calculated as:
+        500 * (rating / MAX_RATING + solved / MAX_SOLVED)
+        
+        Where:
+        - MAX_RATING = 2000
+        - MAX_SOLVED = total number of problems across all contests
+        
+        Returns:
+            dict: Dictionary mapping handles to lists with name and calculated score
+        """
+        result = {}
+        if self.mode in ['shprt', 'full']:
+            result = self.process_web()
+        elif self.mode in ['dumper']:
+            result = self.process_dump()
+        return result
+        
+        
 

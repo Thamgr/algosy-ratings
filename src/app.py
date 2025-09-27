@@ -9,9 +9,8 @@ from lib.fetchers.UsersFetcher import UsersFetcher
 from lib.parsers.InformaticsParser import InformaticsParser
 from lib.parsers.UsersParser import UsersParser
 from lib.renderer.renderer import Renderer
-from lib.global_data import GlobalData
+from lib.dumpers.Dumper import Dumper
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from datetime import datetime
 import logging
 from dotenv import load_dotenv
 
@@ -25,6 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REANIMATE_INTERVAL_MINUTES = int(os.getenv("REANIMATE_INTERVAL_MINUTES"))
 FETCH_INTERVAL_MINUTES = int(os.getenv("FETCH_INTERVAL_MINUTES"))
 PARSE_INTERVAL_MINUTES = int(os.getenv("PARSE_INTERVAL_MINUTES"))
+DUMP_INTERVAL_MINUTES = int(os.getenv("DUMP_INTERVAL_MINUTES"))
 
 # Configure logging
 logging.basicConfig(
@@ -54,6 +54,12 @@ def parse_data():
         fetcher.prepare()
         fetcher.process()
 
+def dump_data():
+    dumpers = [Dumper()]
+    for dumper in dumpers:
+        dumper.prepare()
+        dumper.process()
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -69,6 +75,7 @@ async def startup_event():
     scheduler.add_job(reanimate, 'interval', minutes=REANIMATE_INTERVAL_MINUTES)
     scheduler.add_job(fetch_data, 'interval', minutes=FETCH_INTERVAL_MINUTES)
     scheduler.add_job(parse_data, 'interval', minutes=PARSE_INTERVAL_MINUTES)
+    scheduler.add_job(dump_data, 'interval', minutes=DUMP_INTERVAL_MINUTES)
     scheduler.start()
     logger.info(f"Scheduler started - will fetch data every {FETCH_INTERVAL_MINUTES} minutes and parse data every {PARSE_INTERVAL_MINUTES} minutes")
 
