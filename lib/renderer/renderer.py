@@ -128,7 +128,7 @@ class Renderer:
             dict: Dictionary mapping handles to lists with name and calculated score
         """
         result = {}
-        if self.mode in ['shprt', 'full']:
+        if self.mode in ['short', 'full']:
             result = self.process_web()
         elif self.mode in ['dumper']:
             result = self.process_dump()
