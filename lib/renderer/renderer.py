@@ -80,6 +80,7 @@ class Renderer:
             return False
         
     def process_web(self):
+        retult = {}
         try:
             if not self.participants_data:
                 self.logger.warning("No participants data available. Call prepare() first.")
