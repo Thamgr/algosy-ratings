@@ -15,13 +15,14 @@ class Dumper:
         """
         self.logger = logging.getLogger(__name__)
         self.renderer = Renderer(mode='dumper')  # Use 'dumper' mode to get process_dump data
-        self.snapshots_dir = os.environ.get('SNAPSHOTS_PATH')
+        self.PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
+        self.SNAPSHOTS_PATH = os.environ.get('SNAPSHOTS_PATH')
 
     def prepare(self):
         # Create snapshots directory if it doesn't exist
-        if not os.path.exists(self.snapshots_dir):
-            os.makedirs(self.snapshots_dir)
-            self.logger.info(f"Created snapshots directory: {self.snapshots_dir}")
+        if not os.path.exists(self.SNAPSHOTS_PATH):
+            os.makedirs(self.SNAPSHOTS_PATH)
+            self.logger.info(f"Created snapshots directory: {self.SNAPSHOTS_PATH}")
     
     def process(self):
         """
@@ -45,7 +46,7 @@ class Dumper:
             
             # Generate filename with current date and time
             timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            filename = f"{self.snapshots_dir}/ratings_{timestamp}.csv"
+            filename = os.path.join(self.PROJECT_ROOT, f"{self.SNAPSHOTS_PATH}/ratings_{timestamp}.csv")
             
             # Set fieldnames for the CSV based on the process_dump format
             fieldnames = ['handle', 'name', 'rating', 'solved']
